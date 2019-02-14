@@ -3,10 +3,9 @@
 namespace Horat1us\Yii\Monitoring\Tests\Unit\Control;
 
 use Horat1us\Yii\Monitoring;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use yii\caching\ArrayCache;
-use yii\caching\Cache;
-use yii\caching\CacheInterface;
 
 /**
  * Class CacheTest
@@ -14,6 +13,18 @@ use yii\caching\CacheInterface;
  */
 class CacheTest extends TestCase
 {
+    use PHPMock;
+
+    protected function setUp(): void
+    {
+        $microtime = $this->getFunctionMock("Horat1us\\Yii\\Monitoring\\Control", 'microtime');
+        $microtime->expects($this->once())
+            ->willReturn('123456');
+        $bin2hex = $this->getFunctionMock("Horat1us\\Yii\\Monitoring\\Control", 'bin2hex');
+        $bin2hex->expects($this->once())
+            ->willReturn('test');
+    }
+
     public function testFailedWrite(): void
     {
         $cacheMock = $this->createMock(ArrayCache::class);
@@ -54,26 +65,19 @@ class CacheTest extends TestCase
 
     public function testFailedDelete(): void
     {
-        $cacheMock = new class extends ArrayCache implements CacheInterface
-        {
-            protected $value;
-
-            public function set($key, $value, $duration = null, $dependency = null)
-            {
-                $this->value = $value;
-                return true;
-            }
-
-            public function get($key)
-            {
-                return $this->value;
-            }
-
-            public function delete($key)
-            {
-                return false;
-            }
-        };
+        $cacheMock = $this->createMock(ArrayCache::class);
+        $cacheMock->expects($this->once())
+            ->method('set')
+            ->with('monitoring.cache.test.123456', 'test', 10)
+            ->willReturn(true);
+        $cacheMock->expects($this->once())
+            ->method('get')
+            ->with('monitoring.cache.test.123456')
+            ->willReturn('test');
+        $cacheMock->expects($this->once())
+            ->method($this->equalTo('delete'))
+            ->with('monitoring.cache.test.123456')
+            ->willReturn(false);
 
         $cache = new Monitoring\Control\Cache(['cache' => $cacheMock]);
 
@@ -86,30 +90,23 @@ class CacheTest extends TestCase
 
     public function testSuccess(): void
     {
-        $cacheMock = new class extends ArrayCache implements CacheInterface
-        {
-            protected $value;
-
-            public function set($key, $value, $duration = null, $dependency = null)
-            {
-                $this->value = $value;
-                return true;
-            }
-
-            public function get($key)
-            {
-                return $this->value;
-            }
-
-            public function delete($key)
-            {
-                return true;
-            }
-        };
+        $cacheMock = $this->createMock(ArrayCache::class);
+        $cacheMock->expects($this->once())
+            ->method('set')
+            ->with('monitoring.cache.test.123456', 'test', 10)
+            ->willReturn(true);
+        $cacheMock->expects($this->once())
+            ->method('get')
+            ->with('monitoring.cache.test.123456')
+            ->willReturn('test');
+        $cacheMock->expects($this->once())
+            ->method($this->equalTo('delete'))
+            ->with('monitoring.cache.test.123456')
+            ->willReturn(true);
 
         $cache = new Monitoring\Control\Cache(['cache' => $cacheMock]);
         $details = $cache->execute();
 
-        $this->assertNotEmpty($details['type']);
+        $this->assertRegExp('/Mock_ArrayCache_[a-z0-9]+/', $details['type']);
     }
 }
