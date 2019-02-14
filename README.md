@@ -26,9 +26,6 @@ composer require horat1us/yii2-monitoring
 - [Tests](./tests/)
     - [Unit](./tests/Unit) - all PhpUnit test cases
 
-## Todo
-- Increase code coverage to 100%
-
 ## Contributors
 - [Alexander <horat1us> Letnikow](mailto:reclamme@gmail.com)
 
