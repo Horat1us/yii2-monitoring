@@ -1,5 +1,5 @@
 # Yii2 Monitoring
-[![Build Status](https://travis-ci.org/horat1us/yii2-monitoring.svg?branch=master)](https://travis-ci.org/horat1us/yii2-monitoring)
+[![Build Status](https://travis-ci.org/Horat1us/yii2-monitoring.svg?branch=master)](https://travis-ci.org/Horat1us/yii2-monitoring)
 [![codecov](https://codecov.io/gh/horat1us/yii2-monitoring/branch/master/graph/badge.svg)](https://codecov.io/gh/horat1us/yii2-monitoring)
 
 Package allows to define custom monitoring controls (rules) and execute them using web endpoints or console methods.
