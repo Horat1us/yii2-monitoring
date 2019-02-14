@@ -19,7 +19,7 @@ class Database extends Monitoring\Control
     public const CODE_ASSERT = 502;
 
     /** @var string|array|db\Connection */
-    public $db;
+    public $db = 'db';
 
     /**
      * Test query to execute in database
