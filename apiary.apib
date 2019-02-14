@@ -24,40 +24,73 @@ Will be included to response if control (rule) failed.
 
 #### Properties
 
-+ type: \Exception (string, required) - class name of failed control
++ type: Exception (string, required) - class name of failed control
 + code: 101 (number, required) - code of failure
-+ message: "Failed to test database" (string, required) - failure description
++ message: Failed to test database (string, required) - failure description
 + details (object)
 
 ### Response (object)
 
 + state: ok (State, required)
 + ms (Execution Time, required)
-+ error (Error, optional) - will be included if state = error
-+ details (object, optional) - will be included if state = ok and control returns details
++ details (object, optional) - control response details
+
+### Failure Response (object)
+
++ state: error (State, required)
++ ms (Execution Time, required)
++ error (Error, required)
 
 
-
-## Control [/?id={id}]
+## Single Control [/?id={id}]
 
 ### Execute control [GET]
 
 + Parameters
     - id: database (string, required) - identifier of configured control
 
++ Request
+    + Headers
+    
+            X-Expect: ok
+            
 + Response 200 (application/json)
     + Attributes (Response)
+
++ Request
+    + Headers
     
-## Full List [/full]
+            X-Expect: error
+
++ Response 200 (application/json)
+    + Attributes (Failure Response)
+
+## Multiple Controls [/full]
 
 ### Execute all configured controls [GET]
+
++ Request
+    + Headers
+    
+            X-Expect: ok
 
 + Response 200 (application/json)
     + Attributes
         + Include Response
-        + error (Error, optional)
+        + details (object, required)
+            + control_id (Response)
+
++ Request
+    + Headers
+    
+            X-Expect: error
+
++ Response 200 (application/json)
+    + Attributes
+        + Include Failure Response
+        + error (Error)
             + code: 0 (number, required)
+            + message: Failed to execute one or more controls
             + details (object, required)
-                + control_id (Response)
-        + details (object, optional)
-            + control_id: (Response)
+                + ok_control_id (Response)
+                + fail_control_id (Failure Response)
