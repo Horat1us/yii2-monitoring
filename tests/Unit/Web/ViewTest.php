@@ -73,4 +73,14 @@ class ViewTest extends TestCase
             $clonedViewData['error']
         );
     }
+
+    /**
+     * @expectedException \BadMethodCallException
+     * @expectedExceptionMessage Unable to convert to JSON: missing state
+     */
+    public function testFailedJsonSerialize(): void
+    {
+        $view = new Monitoring\Web\View();
+        $view->jsonSerialize();
+    }
 }
