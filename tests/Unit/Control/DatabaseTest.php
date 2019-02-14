@@ -28,14 +28,14 @@ class DatabaseTest extends TestCase
 
     /**
      * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessage Assert must be specified as string or \Closure
+     * @expectedExceptionMessage Assert must be specified as scalar or \Closure
      * @expectedExceptionCode 2
      */
     public function testFailedInitWithInvalidAssert(): void
     {
         new Database([
             'db' => $this->createMock(db\Connection::class),
-            'assert' => false
+            'assert' => ['not-scalar',],
         ]);
     }
 

@@ -36,9 +36,9 @@ class Database extends Monitoring\Control
      * or scalar value to compare with result
      * It should return boolean
      *
-     * @var string|\Closure
+     * @var string|int|\Closure
      */
-    public $assert = "1";
+    public $assert = 1;
 
     /**
      * @throws base\InvalidConfigException
@@ -59,9 +59,9 @@ class Database extends Monitoring\Control
             );
         }
 
-        if (!is_string($this->assert) && !$this->assert instanceof \Closure) {
+        if (!is_scalar($this->assert) && !$this->assert instanceof \Closure) {
             throw new base\InvalidConfigException(
-                "Assert must be specified as string or \Closure",
+                "Assert must be specified as scalar or \Closure",
                 2
             );
         }
