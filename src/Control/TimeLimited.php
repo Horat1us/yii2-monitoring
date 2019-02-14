@@ -81,7 +81,7 @@ class TimeLimited extends Monitoring\Control
     protected function isRangeMatch(): bool
     {
         $current = date('H:i:s');
-        return $this->min < $current && $current < $this->max;
+        return (($this->min ?: '00:00:00') <= $current) && ($current <= ($this->max ?: '23:59:59'));
     }
 
     protected function details(): array

@@ -14,7 +14,7 @@ class ViewTest extends TestCase
     public function testSuccess(): void
     {
         $view = new Monitoring\Web\View();
-        sleep(1);
+        sleep(.1);
 
         $details = ['someDetails'];
         $clonedView = $view->success($details);
@@ -29,7 +29,7 @@ class ViewTest extends TestCase
     public function testFail(): void
     {
         $view = new Monitoring\Web\View();
-        sleep(1);
+        sleep(.1);
 
         $exception = new \RuntimeException('Some exception');
         $clonedView = $view->fail($exception);
@@ -52,7 +52,7 @@ class ViewTest extends TestCase
     public function testFailWithMonitorException(): void
     {
         $view = new Monitoring\Web\View();
-        sleep(1);
+        sleep(.1);
 
         $details = ['someDetails'];
         $exception = new Monitoring\Exception('Some exception', -1, $details);
