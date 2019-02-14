@@ -48,4 +48,43 @@ class TimeLimitedTest extends TestCase
             'max' => 'invalid'
         ]);
     }
+
+    public function testSuccess(): void
+    {
+        $control = $this->createMock(Control\Cache::class);
+        $control->expects($this->once())
+            ->method('execute')
+            ->willReturn(['test']);
+        $timeLimited = new Control\TimeLimited([
+            'control' => $control,
+            'min' => date('00:00:00'),
+            'max' => date('23:59:59')
+        ]);
+
+        $this->assertEquals(['test'], $timeLimited->execute());
+    }
+
+    public function testMin(): void
+    {
+        $control = $this->createMock(Control\Cache::class);
+        $timeLimited = new Control\TimeLimited([
+            'control' => $control,
+            'min' => date('23:59:59'),
+        ]);
+
+        $result = $timeLimited->execute();
+        $this->assertArrayHasKey('type', $result);
+    }
+
+    public function testMax(): void
+    {
+        $control = $this->createMock(Control\Cache::class);
+        $timeLimited = new Control\TimeLimited([
+            'control' => $control,
+            'max' => date('00:00:00'),
+        ]);
+
+        $result = $timeLimited->execute();
+        $this->assertArrayHasKey('type', $result);
+    }
 }
