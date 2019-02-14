@@ -1,0 +1,63 @@
+# Yii2 Monitoring
+
+# Description Of Usual Server Responses:
+- 200 `OK` - the request was successful, control execution status available in body.
+- 404 `Not Found` - the requested control does not exist
+- 503 `Unavailable` - the required control has invalid configuration
+
+## Data Structures
+
+### State (enum)
++ `ok` - control executed successfuly
++ `error` - control executed with error
+
+### Execution Time (object)
+Contains execution time statistics
+
+#### Properties
+
+- begin: 1550110256.26912 (number, required) - unix timestamp, request time
+- total: 0.008704900741577148 (number, required) - unix
+
+### Error (object)
+Will be included to response if control (rule) failed.
+
+#### Properties
+
++ type: \Exception (string, required) - class name of failed control
++ code: 101 (number, required) - code of failure
++ message: "Failed to test database" (string, required) - failure description
++ details (object)
+
+### Response (object)
+
++ state: ok (State, required)
++ ms (Execution Time, required)
++ error (Error, optional) - will be included if state = error
++ details (object, optional) - will be included if state = ok and control returns details
+
+
+
+## Control [/?id={id}]
+
+### Execute control [GET]
+
++ Parameters
+    - id: database (string, required) - identifier of configured control
+
++ Response 200 (application/json)
+    + Attributes (Response)
+    
+## Full List [/full]
+
+### Execute all configured controls [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + Include Response
+        + error (Error, optional)
+            + code: 0 (number, required)
+            + details (object, required)
+                + control_id (Response)
+        + details (object, optional)
+            + control_id: (Response)
