@@ -49,7 +49,6 @@ class TimeLimited extends Monitoring\Control
         if (is_string($this->max)) {
             $this->validateTime($this->max);
         } elseif (!is_string($this->min)) {
-
             throw new base\InvalidConfigException(
                 "Minimal or maximal time limit have to be specified as string",
                 1
