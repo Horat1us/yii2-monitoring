@@ -40,10 +40,10 @@ class Cache extends Monitoring\Control
         /** @noinspection PhpUnhandledExceptionInspection */
         $contents = bin2hex(random_bytes(512));
 
-        $isWitted = $this->cache->set($key, $contents, 10);
+        $isWritten = $this->cache->set($key, $contents, 10);
         $this->assertEquals(
             true,
-            $isWitted,
+            $isWritten,
             "Ошибка записи значения в кэш",
             static::CODE_WRITE
         );
