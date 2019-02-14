@@ -33,7 +33,7 @@ abstract class Control extends base\BaseObject implements ControlInterface
             return;
         }
 
-        $this->fail($message, $code, $details + +compact('expected', 'actual'));
+        $this->fail($message, $code, $details + compact('expected', 'actual'));
     }
 
     protected function details(): array
