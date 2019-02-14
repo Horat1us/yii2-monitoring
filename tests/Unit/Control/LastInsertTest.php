@@ -64,4 +64,120 @@ class LastInsertTest extends TestCase
             'interval' => false
         ]);
     }
+
+    /**
+     * @expectedException \Horat1us\Yii\Monitoring\Exception
+     * @expectedExceptionMessage Последняя запись не найдена
+     * @expectedExceptionCode 401
+     */
+    public function testFailedScalar(): void
+    {
+        $lastInsert = new LastInsert([
+            'query' => function () {
+                $mock = $this->createMock(Query::class);
+                $mock->expects($this->once())
+                    ->method('orderBy')
+                    ->with(['created_at' => SORT_DESC])
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('select')
+                    ->with('created_at')
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('scalar')
+                    ->willReturn(null);
+                return $mock;
+            },
+            'interval' => 'PT3M'
+        ]);
+
+        $lastInsert->execute();
+    }
+
+    /**
+     * @expectedException \Horat1us\Yii\Monitoring\Exception
+     * @expectedExceptionMessage Ошибка получения времени записи
+     * @expectedExceptionCode 402
+     */
+    public function testFailedDateTime(): void
+    {
+        $lastInsert = new LastInsert([
+            'query' => function () {
+                $mock = $this->createMock(Query::class);
+                $mock->expects($this->once())
+                    ->method('orderBy')
+                    ->with(['created_at' => SORT_DESC])
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('select')
+                    ->with('created_at')
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('scalar')
+                    ->willReturn('invalidDate');
+                return $mock;
+            },
+            'interval' => 'PT3M',
+            'format' => 'Y-m-d'
+        ]);
+
+        $lastInsert->execute();
+    }
+
+    /**
+     * @expectedException \Horat1us\Yii\Monitoring\Exception
+     * @expectedExceptionMessageRegExp /Последняя запись от [0-9]{4}-(1[0-2]{1}|0[1-9]{1})-(0[0-9]{1}|[0-1]{1}[0-9]{1}|3[0-1]{1})T([0-1]{1}[0-9]{1}|2[0-4]{1}):[0-5]{1}/
+     * @expectedExceptionCode 403
+     */
+    public function testFailedAwait(): void
+    {
+        $lastInsert = new LastInsert([
+            'query' => function () {
+                $mock = $this->createMock(Query::class);
+                $mock->expects($this->once())
+                    ->method('orderBy')
+                    ->with(['created_at' => SORT_DESC])
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('select')
+                    ->with('created_at')
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('scalar')
+                    ->willReturn('2018-03-12');
+                return $mock;
+            },
+            'interval' => 'PT3M',
+            'format' => 'Y-m-d'
+        ]);
+
+        $lastInsert->execute();
+    }
+
+    public function testTest(): void
+    {
+        $lastInsert = new LastInsert([
+            'query' => function () {
+                $mock = $this->createMock(Query::class);
+                $mock->expects($this->once())
+                    ->method('orderBy')
+                    ->with(['created_at' => SORT_DESC])
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('select')
+                    ->with('created_at')
+                    ->willReturn($mock);
+                $mock->expects($this->once())
+                    ->method('scalar')
+                    ->willReturn('2018-03-12');
+                return $mock;
+            },
+            'interval' => 'P2Y4DT6H8M',
+            'format' => 'Y-m-d'
+        ]);
+
+        $result = $lastInsert->execute();
+        $this->assertInstanceOf(\DateTime::class, new \DateTime($result['expected']));
+        $this->assertInstanceOf(\DateTime::class, new \DateTime($result['actual']));
+    }
 }
