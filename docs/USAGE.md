@@ -10,7 +10,10 @@ There is some default controls implementations:
 and comparing result to expected.
 - [LastInsert](../src/Control/LastInsert.php) - fetches last record in database using query from configuration.
 It will compare date time attribute with specified interval.
-- [TimeLimited](../src/Control/TimeLimited.php) - blocking control execution using proxy-pattern.
+- [Dependency](../src/Control/Dependency.php) - blocking control execution using dependencies
+    - [Dependency\TimeLimit](../src/Control/Dependency/TimeLimit.php) - control dependency to block execution due to current time
+    - [Dependency\Item](../src/Control/Dependency/Item.php) - control dependency to block execution using
+- [TimeLimited](../src/Control/TimeLimited.php) - *deprecated*, blocking control execution using proxy-pattern.  
 
 This example will check for last record (in order table) in database between 09:00 and 22:00.    
 ```php
@@ -23,9 +26,14 @@ $controller = [
     'class' => Monitoring\Web\Controller::class,
     'controls' => [
         'orders' => [
-            'class' => Monitoring\Control\TimeLimited::class,
-            'min' => '09:00:00',
-            'max' => '22:00:00',
+            'class' => Monitoring\Control\Dependency::class,
+            'dependencies' => [
+                [
+                    'class' => Monitoring\Control\Dependency\TimeLimit::class,
+                    'min' => '09:00:00',
+                    'max' => '22:00:00',     
+                ],    
+            ],
             'control' => [
                 'class' => Monitoring\Control\LastInsert::class,    
                 'query' => function(): db\Query {
