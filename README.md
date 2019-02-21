@@ -26,6 +26,9 @@ composer require horat1us/yii2-monitoring
 - [Tests](./tests/)
     - [Unit](./tests/Unit) - all PhpUnit test cases
 
+## Suggest
+- [wearessho-team/yii2-monitoring-fs](https://github.com/wearesho-team/yii2-monitoring-fs) - Yii2 filesystem monitoring
+
 ## Contributors
 - [Alexander <horat1us> Letnikow](mailto:reclamme@gmail.com)
 
