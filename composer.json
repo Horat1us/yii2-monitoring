@@ -37,5 +37,8 @@
     "phpcbf": "phpcbf --standard=PSR2 ./src ./tests",
     "cover": "phpunit --coverage-clover=coverage.xml",
     "test": "phpunit"
+  },
+  "suggest": {
+    "wearesho-team/yii2-monitoring-fs": "Yii2 filesystem monitoring"
   }
 }
