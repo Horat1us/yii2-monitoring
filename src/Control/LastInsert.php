@@ -92,9 +92,7 @@ class LastInsert extends Monitoring\Control
         $query = call_user_func($this->query);
 
         $value = $query
-            ->orderBy([$this->attribute => SORT_DESC])
-            ->select($this->attribute)
-            ->scalar();
+            ->max($this->attribute);
 
         $this->assertEquals(
             true,

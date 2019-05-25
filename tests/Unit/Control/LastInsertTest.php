@@ -4,7 +4,7 @@ namespace Horat1us\Yii\Monitoring\Tests\Unit\Control;
 
 use Horat1us\Yii\Monitoring\Control\LastInsert;
 use PHPUnit\Framework\TestCase;
-use yii\db\Query;
+use yii\db;
 
 /**
  * Class LastInsertTest
@@ -28,7 +28,7 @@ class LastInsertTest extends TestCase
     {
         $lastInsert = new LastInsert([
             'query' => function () {
-                return $this->createMock(Query::class);
+                return $this->createMock(db\Query::class);
             },
             'interval' => 'PT3M'
         ]);
@@ -45,7 +45,7 @@ class LastInsertTest extends TestCase
     {
         new LastInsert([
             'query' => function () {
-                return $this->createMock(Query::class);
+                return $this->createMock(db\Query::class);
             },
             'interval' => 'Invalid 123'
         ]);
@@ -59,7 +59,7 @@ class LastInsertTest extends TestCase
     {
         new LastInsert([
             'query' => function () {
-                return $this->createMock(Query::class);
+                return $this->createMock(db\Query::class);
             },
             'interval' => false
         ]);
@@ -74,23 +74,17 @@ class LastInsertTest extends TestCase
     {
         $lastInsert = new LastInsert([
             'query' => function () {
-                $mock = $this->createMock(Query::class);
+                $mock = $this->createMock(db\Query::class);
                 $mock->expects($this->once())
-                    ->method('orderBy')
-                    ->with(['created_at' => SORT_DESC])
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('select')
-                    ->with('created_at')
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('scalar')
+                    ->method('max')
+                    ->with('"table"."column"')
                     ->willReturn(null);
                 return $mock;
             },
             'interval' => 'PT3M'
         ]);
 
+        $lastInsert->attribute = '"table"."column"';
         $lastInsert->execute();
     }
 
@@ -103,17 +97,10 @@ class LastInsertTest extends TestCase
     {
         $lastInsert = new LastInsert([
             'query' => function () {
-                $mock = $this->createMock(Query::class);
+                $mock = $this->createMock(db\Query::class);
                 $mock->expects($this->once())
-                    ->method('orderBy')
-                    ->with(['created_at' => SORT_DESC])
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('select')
+                    ->method('max')
                     ->with('created_at')
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('scalar')
                     ->willReturn('invalidDate');
                 return $mock;
             },
@@ -133,17 +120,10 @@ class LastInsertTest extends TestCase
     {
         $lastInsert = new LastInsert([
             'query' => function () {
-                $mock = $this->createMock(Query::class);
+                $mock = $this->createMock(db\Query::class);
                 $mock->expects($this->once())
-                    ->method('orderBy')
-                    ->with(['created_at' => SORT_DESC])
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('select')
+                    ->method('max')
                     ->with('created_at')
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('scalar')
                     ->willReturn('2018-03-12');
                 return $mock;
             },
@@ -158,17 +138,10 @@ class LastInsertTest extends TestCase
     {
         $lastInsert = new LastInsert([
             'query' => function () {
-                $mock = $this->createMock(Query::class);
+                $mock = $this->createMock(db\Query::class);
                 $mock->expects($this->once())
-                    ->method('orderBy')
-                    ->with(['created_at' => SORT_DESC])
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('select')
+                    ->method('max')
                     ->with('created_at')
-                    ->willReturn($mock);
-                $mock->expects($this->once())
-                    ->method('scalar')
                     ->willReturn('2018-03-12');
                 return $mock;
             },
