@@ -43,7 +43,7 @@ class Controller extends web\Controller
                 $control->execute()
             )->jsonSerialize();
         } catch (\Throwable $e) {
-            \Yii::error((string)$e, static::class);
+            \Yii::error($e, static::class);
             return $response->fail($e)->jsonSerialize();
         }
     }
@@ -65,7 +65,7 @@ class Controller extends web\Controller
             try {
                 $childResponse->success($control->execute());
             } catch (\Throwable $e) {
-                \Yii::error((string)$e, static::class);
+                \Yii::error($e, static::class);
                 $isFail = true;
                 $childResponse->fail($e);
             }
