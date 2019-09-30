@@ -9,11 +9,13 @@ use Horat1us\Yii\Monitoring;
 /**
  * Class View
  * @package Horat1us\Yii\Monitoring\Web
+ * #todo should be moved out of web folder when controller trait will be refactored into service.
  */
 class View implements \JsonSerializable
 {
     public const STATE_ERROR = 'error';
     public const STATE_OK = 'ok';
+    public const STATE_PENDING = 'pending';
 
     /**
      * Monitoring execution begin microtime
@@ -31,7 +33,7 @@ class View implements \JsonSerializable
      * See STATE_ constants
      * @var string
      */
-    protected $state;
+    protected $state = self::STATE_PENDING;
 
     /**
      * Only for STATE_OK
@@ -72,7 +74,7 @@ class View implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        if (is_null($this->state)) {
+        if ($this->state === self::STATE_PENDING) {
             throw new \BadMethodCallException(
                 "Unable to convert to JSON: missing state"
             );
@@ -105,5 +107,25 @@ class View implements \JsonSerializable
         }
 
         return $json;
+    }
+
+    public function getState(): string
+    {
+        return $this->state;
+    }
+
+    public function getTotal(): ?float
+    {
+        return ($this->end ?? microtime(true)) - $this->begin;
+    }
+
+    public function getException(): ?\Throwable
+    {
+        return $this->exception;
+    }
+
+    public function getDetails(): ?array
+    {
+        return $this->details;
     }
 }

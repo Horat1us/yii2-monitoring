@@ -20,14 +20,15 @@ composer require horat1us/yii2-monitoring
 - [Source Code](./src)
     - [Control](./src/Control) - out-of-box implemented controls
     - [Web](./src/Web) - handling web requests and forming responses
+    - [Console](./src/Console) - handles console interaction   
     - [Exception](./src/Exception.php) - exception caught by [controls](./src/ControlInterface.php)
     - [Control Interface](./src/ControlInterface.php) - monitoring rule interface
     - [Control](./src/Control.php) - monitoring rule abstract implementation using yii BaseObject
-- [Tests](./tests/)
+- [Tests](./tests)
     - [Unit](./tests/Unit) - all PhpUnit test cases
 
 ## Suggest
-- [wearessho-team/yii2-monitoring-fs](https://github.com/wearesho-team/yii2-monitoring-fs) - Yii2 filesystem monitoring
+- [wearesho-team/yii2-monitoring-fs](https://github.com/wearesho-team/yii2-monitoring-fs) - Yii2 filesystem monitoring
 
 ## Contributors
 - [Alexander <horat1us> Letnikow](mailto:reclamme@gmail.com)

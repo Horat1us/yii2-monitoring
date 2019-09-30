@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.0 - [30.09.2019]
+- Implement [console controller](./src/Console/Controller.php)
+- Swap web\Controller error codes constants names
+
 ## 1.3.0 - [25.05.2019]
 - LastInsert control database query optimization
 
