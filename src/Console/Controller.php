@@ -53,13 +53,13 @@ class Controller extends console\Controller
         if ($result->getState() === Monitoring\Web\View::STATE_ERROR) {
             $this->stderr('Error', helpers\Console::FG_RED);
             $this->stderr("\t{$result->getTotal()}", helpers\Console::FG_GREY);
-            $this->stderr(PHP_EOL . $result->getException());
+            $this->stderr(PHP_EOL . $result->getException() . PHP_EOL);
             return console\ExitCode::PROTOCOL;
         }
         $this->stdout("OK", helpers\Console::FG_GREEN);
         $this->stdout("\t{$result->getTotal()}", helpers\Console::FG_GREY);
         if (!is_null($result->getDetails())) {
-            $this->stdout(PHP_EOL . json_encode($result->getDetails()));
+            $this->stdout(PHP_EOL . json_encode($result->getDetails(), JSON_PRETTY_PRINT) . PHP_EOL);
         }
         return console\ExitCode::OK;
     }
