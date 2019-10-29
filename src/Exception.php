@@ -27,4 +27,13 @@ class Exception extends \Exception
     {
         return $this->details;
     }
+
+    public function __toString(): string
+    {
+        $string = parent::__toString() . PHP_EOL
+            . "Details:" . PHP_EOL
+            . json_encode($this->details) . PHP_EOL;
+
+        return $string;
+    }
 }

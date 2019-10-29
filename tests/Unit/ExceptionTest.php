@@ -46,4 +46,12 @@ class ExceptionTest extends TestCase
     {
         $this->assertEquals(static::DETAILS, $this->exception->getDetails());
     }
+
+    public function testToString(): void
+    {
+        $this->assertStringEndsWith(
+            'Details:' . PHP_EOL . '{"key":"value"}' . PHP_EOL,
+            (string)$this->exception
+        );
+    }
 }
