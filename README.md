@@ -2,8 +2,9 @@
 [![Build Status](https://travis-ci.org/Horat1us/yii2-monitoring.svg?branch=master)](https://travis-ci.org/Horat1us/yii2-monitoring)
 [![codecov](https://codecov.io/gh/horat1us/yii2-monitoring/branch/master/graph/badge.svg)](https://codecov.io/gh/horat1us/yii2-monitoring)
 
-Package allows to define custom monitoring controls (rules) and execute them using web endpoints or console methods.
- 
+Package allows to define custom monitoring controls (rules) and execute them using web endpoints or console methods.  
+Includes Web API and CLI controllers.  
+
 ## Installation
 ```bash
 composer require horat1us/yii2-monitoring
@@ -16,7 +17,6 @@ composer require horat1us/yii2-monitoring
 - [Usage](./docs/USAGE.md) - using of built-in controls
 
 ## Structure
-
 - [Source Code](./src)
     - [Control](./src/Control) - out-of-box implemented controls
     - [Web](./src/Web) - handling web requests and forming responses

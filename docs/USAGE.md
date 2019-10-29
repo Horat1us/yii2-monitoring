@@ -22,6 +22,10 @@ This example will check for last record (in order table) in database between 09:
 use Horat1us\Yii\Monitoring;
 use yii\db;
 
+class Order extends db\ActiveRecord {
+    // ...
+}
+
 $controller = [
     'class' => Monitoring\Web\Controller::class,
     'controls' => [
@@ -36,10 +40,7 @@ $controller = [
             ],
             'control' => [
                 'class' => Monitoring\Control\LastInsert::class,    
-                'query' => function(): db\Query {
-                    // Order - db\ActiveRecord class for `order` table
-                    return Order::find();
-                },
+                'query' => [Order::class, 'find'], // \Closure or callable, return db\Query
                 'attribute' => 'created_at', // default
                 'format' => 'Y-m-d H:i:s', // default
             ],
@@ -48,3 +49,87 @@ $controller = [
 ];
 ```
 *Note: php timezone will be used*
+
+## Console (CLI)
+You can also may perform health-check using Yii2 CLI.  
+
+### Configuration
+```php
+<?php
+// console/main.php application configuration
+
+return [
+    // ... other attributes
+    'controllerMap' => [
+        // ... other controllers
+        'health-check' => [
+            'class' => Horat1us\Yii\Monitoring\Console\Controller::class,
+            'controls' => [
+                'db' => Horat1us\Yii\Monitoring\Control\Database::class,
+                'cache' => Horat1us\Yii\Monitoring\Control\Cache::class,
+                'queue' => Horat1us\Yii\Monitoring\Control\Queue::class,
+            ],
+        ],
+    ],
+];
+```
+
+### Usage
+
+1. Perform Batch Test (run all controls)
+```bash
+php yii health-check --format=json
+```
+Output:
+```json
+{
+ "state": "ok",
+ "ms": {
+  "begin": 1572383083.072824,
+  "total": 1.0197219848632812
+ },
+ "details": {
+  "db": {
+   "state": "ok",
+   "ms": {
+    "begin": 1572383083.072836,
+    "total": 0.007030963897705078
+   }
+  },
+  "cache": {
+   "state": "ok",
+   "ms": {
+    "begin": 1572383083.079887,
+    "total": 0.00561213493347168
+   },
+   "details": {
+    "type": "yii\\redis\\Cache"
+   }
+  },
+  "queue": {
+   "state": "ok",
+   "ms": {
+    "begin": 1572383083.085517,
+    "total": 1.0069940090179443
+   },
+   "details": {
+    "type": "yii\\queue\\redis\\Queue"
+   }
+  }
+ }
+}
+```
+2. Perform single control test
+```bash
+php yii health-check/execute db --format=json
+```
+Output:
+```json
+{
+ "state": "ok",
+ "ms": {
+  "begin": 1572383386.694304,
+  "total": 0.006947040557861328
+ }
+}
+```
