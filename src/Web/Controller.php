@@ -63,7 +63,7 @@ class Controller extends web\Controller
     {
         try {
             return $this->executeBatch()->jsonSerialize();
-        } catch(base\InvalidConfigException $exception) {
+        } catch (base\InvalidConfigException $exception) {
             throw new web\HttpException(
                 503,
                 "Invalid controls configuration.",
@@ -73,4 +73,3 @@ class Controller extends web\Controller
         }
     }
 }
-
