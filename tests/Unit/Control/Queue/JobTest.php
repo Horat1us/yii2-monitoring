@@ -9,10 +9,6 @@ use yii\db\Connection;
 use yii\mutex\FileMutex;
 use yii\queue\db\Queue;
 
-/**
- * Class JobTest
- * @package Horat1us\Yii\Monitoring\Tests\Unit\Control\Queue
- */
 class JobTest extends TestCase
 {
     public function testExecute(): void

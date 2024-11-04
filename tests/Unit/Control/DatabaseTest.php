@@ -1,38 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Horat1us\Yii\Monitoring\Tests\Unit\Control;
 
 use Horat1us\Yii\Monitoring\Control\Database;
 use Horat1us\Yii\Monitoring\Exception;
 use PHPUnit\Framework\TestCase;
+use yii\base;
 use yii\db;
 
-/**
- * Class DatabaseTest
- * @package Horat1us\Yii\Monitoring\Tests\Unit\Control
- */
 class DatabaseTest extends TestCase
 {
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessage Query must be specified as string, \Closure or \yii\db\Query
-     * @expectedExceptionCode 1
-     */
     public function testFailedInitWithInvalidQuery(): void
     {
+        $this->expectException(base\InvalidConfigException::class);
+        $this->expectExceptionMessage('Query must be specified as string, \Closure or \yii\db\Query');
+        $this->expectExceptionCode(1);
+
         new Database([
             'db' => $this->createMock(db\Connection::class),
             'query' => false
         ]);
     }
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessage Assert must be specified as scalar or \Closure
-     * @expectedExceptionCode 2
-     */
     public function testFailedInitWithInvalidAssert(): void
     {
+        $this->expectException(base\InvalidConfigException::class);
+        $this->expectExceptionMessage('Assert must be specified as scalar or \Closure');
+        $this->expectExceptionCode(2);
+
         new Database([
             'db' => $this->createMock(db\Connection::class),
             'assert' => ['not-scalar',],

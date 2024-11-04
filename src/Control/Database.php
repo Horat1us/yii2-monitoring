@@ -50,7 +50,8 @@ class Database extends Monitoring\Control
         if ($this->query instanceof \Closure) {
             $this->query = call_user_func($this->query);
         }
-        if (!is_string($this->query)
+        if (
+            !is_string($this->query)
             && !$this->query instanceof db\Query
         ) {
             throw new base\InvalidConfigException(

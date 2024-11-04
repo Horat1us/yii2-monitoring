@@ -1,39 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Horat1us\Yii\Monitoring\Tests\Unit\Web;
 
 use Horat1us\Yii\Monitoring;
 use PHPUnit\Framework\TestCase;
 use yii\base\Module;
+use yii\web;
 
-/**
- * Class ControllerTest
- * @package Horat1us\Yii\Monitoring\Tests\Unit\Web
- */
 class ControllerTest extends TestCase
 {
-    /**
-     * @expectedException \yii\web\NotFoundHttpException
-     * @expectedExceptionMessage Control 1 not found.
-     * @expectedExceptionCode -2
-     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \Yii::$container->set('request', $this->createMock(web\Request::class));
+        \Yii::$container->set('response', $this->createMock(web\Response::class));
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        \Yii::$container->set('request', null);
+        \Yii::$container->set('response', null);
+    }
+
     public function testFailedFindControl(): void
     {
         $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
-        $controller->actionControl(1);
+        $this->expectException(web\NotFoundHttpException::class);
+        $this->expectExceptionCode(-2);
+        $this->expectExceptionMessage('Control 1 not found.');
+        $controller->actionControl('1');
     }
 
-    /**
-     * @expectedException \yii\web\HttpException
-     * @expectedExceptionMessage Control queue has invalid configuration
-     * @expectedExceptionCode -1
-     */
     public function testInvalidControlConfiguration(): void
     {
         $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
         $controller->controls = [
             'queue' => 'invalidControl'
         ];
+        $this->expectException(web\HttpException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Control queue has invalid configuration');
         $controller->actionControl('queue');
     }
 

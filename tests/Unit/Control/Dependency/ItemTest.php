@@ -6,21 +6,16 @@ namespace Horat1us\Yii\Monitoring\Tests\Unit\Control\Dependency;
 
 use PHPUnit\Framework\TestCase;
 use Horat1us\Yii\Monitoring;
+use yii\base;
 
-/**
- * Class ItemTest
- * @package Horat1us\Yii\Monitoring\Tests\Unit\Control\Dependency
- */
 class ItemTest extends TestCase
 {
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionCode 1
-     * @expectedExceptionMessage Match callback have to be callable
-     */
     public function testInvalidMatch(): void
     {
-        new Monitoring\Control\Dependency\Item(['match' => new \stdClass]);
+        $this->expectException(base\InvalidConfigException::class);
+        $this->expectExceptionCode(1);
+        $this->expectExceptionMessage('Match callback have to be callable');
+        new Monitoring\Control\Dependency\Item(['match' => new \stdClass()]);
     }
 
     public function testMatch(): void

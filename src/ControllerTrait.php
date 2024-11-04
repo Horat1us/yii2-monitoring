@@ -26,7 +26,7 @@ trait ControllerTrait
      */
     protected function executeSingle(string $controlId): Web\View
     {
-        $response = new Web\View;
+        $response = new Web\View();
         $control = $this->instantiateControl($controlId);
 
         try {
@@ -45,7 +45,7 @@ trait ControllerTrait
      */
     protected function executeBatch(): Web\View
     {
-        $response = new Web\View;
+        $response = new Web\View();
         $isOk = true;
         $details = [];
 

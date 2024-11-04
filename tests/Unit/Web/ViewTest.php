@@ -74,13 +74,11 @@ class ViewTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Unable to convert to JSON: missing state
-     */
     public function testFailedJsonSerialize(): void
     {
         $view = new Monitoring\Web\View();
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Unable to convert to JSON: missing state');
         $view->jsonSerialize();
     }
 }

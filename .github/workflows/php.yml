@@ -1,0 +1,36 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '7.4', '8.1' ]
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Check PHP Version
+        run: |
+          php -v
+          composer --version
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Run linter
+        run: composer run-script lint
+
+      - name: Run PHPUnit tests
+        run: composer run-script test

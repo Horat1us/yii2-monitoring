@@ -1,24 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Horat1us\Yii\Monitoring\Tests\Unit\Control;
 
 use Horat1us\Yii\Monitoring\Control\Queue;
 use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 use yii\caching\ArrayCache;
+use yii\base;
 
-/**
- * Class QueueTest
- * @package Horat1us\Yii\Monitoring\Tests\Unit\Control
- */
 class QueueTest extends TestCase
 {
     use PHPMock;
 
-    /**
-     * @expectedException \yii\base\InvalidConfigException
-     * @expectedExceptionMessage Cache reference have to be specified as string or array
-     */
     public function testFailedInitWithInvalidQueue(): void
     {
         $queue = new Queue([
@@ -26,14 +21,12 @@ class QueueTest extends TestCase
             'cache' => false
         ]);
 
+        $this->expectException(base\InvalidConfigException::class);
+        $this->expectExceptionMessage('Cache reference have to be specified as string or array');
+
         $queue->execute();
     }
 
-    /**
-     * @expectedException \Horat1us\Yii\Monitoring\Exception
-     * @expectedExceptionMessage Ошибка чтения значения записанного из очереди
-     * @expectedExceptionCode 301
-     */
     public function testFailedAssert(): void
     {
         $microtime = $this->getFunctionMock("Horat1us\\Yii\\Monitoring\\Control", 'microtime');
@@ -63,14 +56,13 @@ class QueueTest extends TestCase
             'timeout' => 4
         ]);
 
+        $this->expectException(\Horat1us\Yii\Monitoring\Exception::class);
+        $this->expectExceptionMessage('Ошибка чтения значения записанного из очереди');
+        $this->expectExceptionCode(301);
+
         $queue->execute();
     }
 
-    /**
-     * @expectedException \Horat1us\Yii\Monitoring\Exception
-     * @expectedExceptionMessage Ошибка чтения значения записанного из очереди
-     * @expectedExceptionCode 301
-     */
     public function testFailedAssertWithTwoIterations(): void
     {
         $microtime = $this->getFunctionMock("Horat1us\\Yii\\Monitoring\\Control", 'microtime');
@@ -84,14 +76,10 @@ class QueueTest extends TestCase
         $queueMock->expects($this->once())
             ->method('push')
             ->willReturn('id');
-        $queueMock->expects($this->at(1))
+        $queueMock->expects($this->exactly(2))
             ->method('isDone')
             ->with('id')
-            ->willReturn(false);
-        $queueMock->expects($this->at(2))
-            ->method('isDone')
-            ->with('id')
-            ->willReturn(true);
+            ->willReturn(false, true);
         $cacheMock = $this->createMock(ArrayCache::class);
         $cacheMock->expects($this->once())
             ->method('get')
@@ -104,14 +92,13 @@ class QueueTest extends TestCase
             'timeout' => 4
         ]);
 
+        $this->expectException(\Horat1us\Yii\Monitoring\Exception::class);
+        $this->expectExceptionMessage('Ошибка чтения значения записанного из очереди');
+        $this->expectExceptionCode(301);
+
         $queue->execute();
     }
 
-    /**
-     * @expectedException \Horat1us\Yii\Monitoring\Exception
-     * @expectedExceptionMessage Ошибка выполнения задачи в очереди
-     * @expectedExceptionCode 302
-     */
     public function testFailedAllAttempts(): void
     {
         $microtime = $this->getFunctionMock("Horat1us\\Yii\\Monitoring\\Control", 'microtime');
@@ -136,6 +123,10 @@ class QueueTest extends TestCase
             'cache' => 'cache',
             'timeout' => 1
         ]);
+
+        $this->expectException(\Horat1us\Yii\Monitoring\Exception::class);
+        $this->expectExceptionMessage('Ошибка выполнения задачи в очереди');
+        $this->expectExceptionCode(302);
 
         $queue->execute();
     }
