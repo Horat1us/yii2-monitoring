@@ -19,7 +19,7 @@ class DatabaseTest extends TestCase
         $this->expectExceptionCode(1);
 
         new Database([
-            'db' => $this->createMock(db\Connection::class),
+            'db' => $this->createStub(db\Connection::class),
             'query' => false
         ]);
     }
@@ -31,7 +31,7 @@ class DatabaseTest extends TestCase
         $this->expectExceptionCode(2);
 
         new Database([
-            'db' => $this->createMock(db\Connection::class),
+            'db' => $this->createStub(db\Connection::class),
             'assert' => ['not-scalar',],
         ]);
     }
@@ -39,7 +39,7 @@ class DatabaseTest extends TestCase
     public function testClosureQuery(): void
     {
         $database = new Database([
-            'db' => $this->createMock(db\Connection::class),
+            'db' => $this->createStub(db\Connection::class),
             'query' => function () {
                 return 'select 1';
             }
@@ -150,7 +150,7 @@ class DatabaseTest extends TestCase
         $query->expects($this->once())
             ->method('createCommand')
             ->willReturn($command);
-        $db = $this->createMock(db\Connection::class);
+        $db = $this->createStub(db\Connection::class);
 
         $database = new Database([
             'db' => $db,

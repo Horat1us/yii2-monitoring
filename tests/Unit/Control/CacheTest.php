@@ -107,6 +107,6 @@ class CacheTest extends TestCase
         $cache = new Monitoring\Control\Cache(['cache' => $cacheMock]);
         $details = $cache->execute();
 
-        $this->assertMatchesRegularExpression('/Mock_ArrayCache_[a-z0-9]+/', $details['type']);
+        $this->assertSame($cacheMock::class, $details['type']);
     }
 }
