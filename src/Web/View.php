@@ -52,7 +52,7 @@ class View implements \JsonSerializable
         $this->begin = microtime(true);
     }
 
-    public function success(array $details = null): View
+    public function success(?array $details = null): View
     {
         $this->end = microtime(true);
         $this->state = static::STATE_OK;

@@ -17,7 +17,7 @@ class QueueTest extends TestCase
     public function testFailedInitWithInvalidQueue(): void
     {
         $queue = new Queue([
-            'queue' => $this->createMock(\yii\queue\db\Queue::class),
+            'queue' => $this->createStub(\yii\queue\db\Queue::class),
             'cache' => false
         ]);
 
@@ -116,7 +116,7 @@ class QueueTest extends TestCase
             ->method('isDone')
             ->with('id')
             ->willReturn(false);
-        $cacheMock = $this->createMock(ArrayCache::class);
+        $cacheMock = $this->createStub(ArrayCache::class);
         \Yii::$container->set('cache', $cacheMock);
         $queue = new Queue([
             'queue' => $queueMock,

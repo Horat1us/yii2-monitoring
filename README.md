@@ -1,5 +1,5 @@
 # Yii2 Monitoring
-[![Build Status](https://travis-ci.org/Horat1us/yii2-monitoring.svg?branch=master)](https://travis-ci.org/Horat1us/yii2-monitoring)
+[![PHP Composer](https://github.com/Horat1us/yii2-monitoring/actions/workflows/php.yml/badge.svg?branch=master)](https://github.com/Horat1us/yii2-monitoring/actions/workflows/php.yml)
 [![codecov](https://codecov.io/gh/horat1us/yii2-monitoring/branch/master/graph/badge.svg)](https://codecov.io/gh/horat1us/yii2-monitoring)
 
 Package allows to define custom monitoring controls (rules) and execute them using web endpoints or console methods.  
@@ -7,8 +7,11 @@ Includes Web API and CLI controllers.
 
 ## Installation
 ```bash
-composer require horat1us/yii2-monitoring
+composer require horat1us/yii2-monitoring:^1.6
 ```
+
+Requires PHP >= 8.4 and `yiisoft/yii2` ^2.0.54.  
+Compatibility: tested on PHP 8.4, PHP 8.5.
 
 ## Documentation
 - [Apiary](https://yii2monitoring.docs.apiary.io/#)

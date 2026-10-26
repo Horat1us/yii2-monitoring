@@ -16,7 +16,7 @@ class TimeLimitedTest extends TestCase
         $this->expectExceptionMessage('Minimal or maximal time limit have to be specified as string');
         $this->expectExceptionCode(1);
         new Control\TimeLimited([
-            'control' => $this->createMock(Control\Cache::class)
+            'control' => $this->createStub(Control\Cache::class)
         ]);
     }
 
@@ -26,7 +26,7 @@ class TimeLimitedTest extends TestCase
         $this->expectExceptionMessage('Invalid time format: invalid');
         $this->expectExceptionCode(2);
         new Control\TimeLimited([
-            'control' => $this->createMock(Control\Cache::class),
+            'control' => $this->createStub(Control\Cache::class),
             'min' => 'invalid'
         ]);
     }
@@ -37,7 +37,7 @@ class TimeLimitedTest extends TestCase
         $this->expectExceptionMessage('Invalid time format: invalid');
         $this->expectExceptionCode(2);
         new Control\TimeLimited([
-            'control' => $this->createMock(Control\Cache::class),
+            'control' => $this->createStub(Control\Cache::class),
             'max' => 'invalid'
         ]);
     }
@@ -59,7 +59,7 @@ class TimeLimitedTest extends TestCase
 
     public function testMin(): void
     {
-        $control = $this->createMock(Control\Cache::class);
+        $control = $this->createStub(Control\Cache::class);
         $timeLimited = new Control\TimeLimited([
             'control' => $control,
             'min' => date('23:59:59'),
@@ -71,7 +71,7 @@ class TimeLimitedTest extends TestCase
 
     public function testMax(): void
     {
-        $control = $this->createMock(Control\Cache::class);
+        $control = $this->createStub(Control\Cache::class);
         $timeLimited = new Control\TimeLimited([
             'control' => $control,
             'max' => date('00:00:00'),

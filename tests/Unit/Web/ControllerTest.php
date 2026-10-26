@@ -14,8 +14,8 @@ class ControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        \Yii::$container->set('request', $this->createMock(web\Request::class));
-        \Yii::$container->set('response', $this->createMock(web\Response::class));
+        \Yii::$container->set('request', $this->createStub(web\Request::class));
+        \Yii::$container->set('response', $this->createStub(web\Response::class));
     }
 
     protected function tearDown(): void
@@ -27,7 +27,7 @@ class ControllerTest extends TestCase
 
     public function testFailedFindControl(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $this->expectException(web\NotFoundHttpException::class);
         $this->expectExceptionCode(-2);
         $this->expectExceptionMessage('Control 1 not found.');
@@ -36,7 +36,7 @@ class ControllerTest extends TestCase
 
     public function testInvalidControlConfiguration(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $controller->controls = [
             'queue' => 'invalidControl'
         ];
@@ -48,7 +48,7 @@ class ControllerTest extends TestCase
 
     public function testFailedActionControl(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $queue = $this->createMock(Monitoring\Control\Queue::class);
         $queue->expects($this->once())
             ->method('execute')
@@ -63,7 +63,7 @@ class ControllerTest extends TestCase
 
     public function testSuccessActionControl(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $queue = $this->createMock(Monitoring\Control\Queue::class);
         $queue->expects($this->once())
             ->method('execute')
@@ -78,7 +78,7 @@ class ControllerTest extends TestCase
 
     public function testActionFullWithErroredControl(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $queue = $this->createMock(Monitoring\Control\Queue::class);
         $queue->expects($this->once())
             ->method('execute')
@@ -100,7 +100,7 @@ class ControllerTest extends TestCase
 
     public function testSuccessActionFull(): void
     {
-        $controller = new Monitoring\Web\Controller('id', $this->createMock(Module::class));
+        $controller = new Monitoring\Web\Controller('id', $this->createStub(Module::class));
         $queue = $this->createMock(Monitoring\Control\Queue::class);
         $queue->expects($this->once())
             ->method('execute')

@@ -13,8 +13,8 @@ class JobTest extends TestCase
 {
     public function testExecute(): void
     {
-        \Yii::$container->set('db', $this->createMock(Connection::class));
-        \Yii::$container->set('mutex', $this->createMock(FileMutex::class));
+        \Yii::$container->set('db', $this->createStub(Connection::class));
+        \Yii::$container->set('mutex', $this->createStub(FileMutex::class));
         $value = 'test-value';
         $key = 'test-key';
         $mock = $this->createMock(ArrayCache::class);
