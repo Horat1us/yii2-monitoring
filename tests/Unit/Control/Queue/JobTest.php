@@ -4,33 +4,26 @@ namespace Horat1us\Yii\Monitoring\Tests\Unit\Control\Queue;
 
 use Horat1us\Yii\Monitoring\Control\Queue\Job;
 use PHPUnit\Framework\TestCase;
-use yii\caching\ArrayCache;
-use yii\db\Connection;
-use yii\mutex\FileMutex;
-use yii\queue\db\Queue;
+use yii\caching\CacheInterface;
+use yii\queue\Queue;
 
 class JobTest extends TestCase
 {
     public function testExecute(): void
     {
-        \Yii::$container->set('db', $this->createStub(Connection::class));
-        \Yii::$container->set('mutex', $this->createStub(FileMutex::class));
         $value = 'test-value';
         $key = 'test-key';
-        $mock = $this->createMock(ArrayCache::class);
-        $mock->expects($this->once())
-            ->method('get')
-            ->with($key)
-            ->willReturn($value);
+        $cache = $this->createMock(CacheInterface::class);
+        $cache->expects($this->once())
+            ->method('set')
+            ->with($key, $value, 10)
+            ->willReturn(true);
         $job = new Job([
             'key' => $key,
-            'cache' => $mock,
+            'cache' => $cache,
             'value' => $value,
             'duration' => 10,
         ]);
-        $job->execute(new Queue());
-        /** @var ArrayCache $cache */
-        $cache = $job->cache;
-        $this->assertEquals($value, $cache->get($key));
+        $job->execute($this->createStub(Queue::class));
     }
 }

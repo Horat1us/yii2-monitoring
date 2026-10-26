@@ -32,7 +32,7 @@ class ExceptionTest extends TestCase
         );
     }
 
-    public function getGetMessage(): void
+    public function testGetMessage(): void
     {
         $this->assertEquals(static::MESSAGE, $this->exception->getMessage());
     }
