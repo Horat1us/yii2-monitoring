@@ -70,15 +70,15 @@ class DatabaseTest extends TestCase
 
     public function testExceptionQueryScalar(): void
     {
-        $this->expectExceptionObject(new Exception(
-            "Ошибка выполнения запроса",
-            Database::CODE_QUERY,
-            ['query' => 'test']
-        ));
+        $queryException = new db\Exception('Some exception');
         $command = $this->createMock(db\Command::class);
         $command->expects($this->once())
             ->method('queryScalar')
-            ->willThrowException(new db\Exception('Some exception'));
+            ->willThrowException($queryException);
+        $command->expects($this->once())
+            ->method('__get')
+            ->with('rawSql')
+            ->willReturn('SELECT 1;');
         $db = $this->createMock(db\Connection::class);
         $db->expects($this->once())
             ->method('createCommand')
@@ -89,7 +89,15 @@ class DatabaseTest extends TestCase
             'db' => $db,
         ]);
 
-        $database->execute();
+        try {
+            $database->execute();
+            $this->fail('Monitoring exception was not thrown');
+        } catch (Exception $exception) {
+            $this->assertEquals("Ошибка выполнения запроса", $exception->getMessage());
+            $this->assertEquals(Database::CODE_QUERY, $exception->getCode());
+            $this->assertEquals(['query' => 'SELECT 1;'], $exception->getDetails());
+            $this->assertSame($queryException, $exception->getPrevious());
+        }
     }
 
     public function testFailedAssertScalar(): void

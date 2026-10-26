@@ -80,7 +80,8 @@ class Database extends Monitoring\Control
                 static::CODE_QUERY,
                 [
                     'query' => $command->rawSql,
-                ]
+                ],
+                $exception
             );
         }
 

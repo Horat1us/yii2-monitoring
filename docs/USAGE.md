@@ -133,3 +133,12 @@ Output:
  }
 }
 ```
+
+With `--format=json` the command prints only the JSON, also when a control fails.
+The default `--format=raw` prints `OK` and the details to stdout, or `Error` and the exception to stderr.
+
+Exit codes:
+- `0` - all controls passed
+- `65` - control not found (`execute` action)
+- `76` - one or more controls failed
+- `78` - invalid control configuration or `--format` value
